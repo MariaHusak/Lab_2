@@ -14,7 +14,7 @@ MAX_HOLD_TIME = 23
 class Platformer(QWidget):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Dog Platformer")
+        self.setWindowTitle("Paw Runner")
         self.setFixedSize(WIDTH, HEIGHT)
         self.setFocusPolicy(Qt.StrongFocus)
 
