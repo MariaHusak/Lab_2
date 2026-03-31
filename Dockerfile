@@ -5,5 +5,6 @@ WORKDIR /app
 COPY . .
 
 RUN pip install --upgrade pip
+RUN pip install pytest
 
 CMD ["python", "main.py"]
