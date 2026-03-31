@@ -17,26 +17,27 @@ pipeline {
             }
         }
 
-        stage('Install dependencies') {
-            steps {
-                sh '''
-                    python -m venv venv
-                    . venv/bin/activate
-                    pip install --upgrade pip
-                    pip install -r requirements.txt
-                    pip install PySide6 pytest
-                '''
-            }
+    stage('Install dependencies') {
+        steps {
+            echo 'Creating virtual environment and installing dependencies...'
+            sh '''
+                python3 -m venv venv
+                source venv/bin/activate
+                pip install --upgrade pip
+                pip install -r requirements.txt
+            '''
         }
+    }
 
-        stage('Run Tests') {
-            steps {
-                sh '''
-                    . venv/bin/activate
-                    pytest test.py --maxfail=1 --disable-warnings -q
-                '''
-            }
+    stage('Run Tests') {
+        steps {
+            echo 'Running tests with pytest...'
+            sh '''
+                source venv/bin/activate
+                pytest test.py --maxfail=1 --disable-warnings -q
+            '''
         }
+    }
 
         stage('Deploy') {
             steps {
