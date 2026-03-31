@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        CARGO_DIR = "D:/cargo"
+        CARGO_DIR = "/var/jenkins_home/cargo"
     }
 
     stages {
@@ -15,22 +15,23 @@ pipeline {
         stage('Install dependencies') {
             steps {
                 echo 'Installing dependencies...'
-                bat 'python -m pip install --upgrade pip'
-                bat 'pip install PySide6 pytest'
+                sh 'python3 -m pip install --upgrade pip'
+                sh 'pip3 install PySide6 pytest'
             }
         }
 
         stage('Run Tests') {
             steps {
                 echo 'Running tests with pytest...'
-                bat 'pytest test.py --maxfail=1 --disable-warnings -q'
+                sh 'pytest test.py --maxfail=1 --disable-warnings -q'
             }
         }
 
         stage('Deploy') {
             steps {
                 echo "Copying project to ${CARGO_DIR}"
-                bat "xcopy /s /y . ${CARGO_DIR}\\"
+                sh 'mkdir -p $CARGO_DIR'
+                sh 'cp -r * $CARGO_DIR/'
             }
         }
     }
