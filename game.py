@@ -1,7 +1,10 @@
 import random
-from PySide6.QtWidgets import QWidget
 from PySide6.QtGui import QPainter, QColor, QFont
 from PySide6.QtCore import Qt, QTimer, QRect
+try:
+    from PySide6.QtWidgets import QWidget
+except ImportError:
+    QWidget = object
 
 WIDTH = 800
 HEIGHT = 400
