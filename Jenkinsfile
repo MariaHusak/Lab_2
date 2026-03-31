@@ -14,16 +14,24 @@ pipeline {
 
         stage('Install dependencies') {
             steps {
-                echo 'Installing dependencies...'
-                sh 'python3 -m pip install --upgrade pip'
-                sh 'pip3 install PySide6 pytest'
+                echo 'Creating virtual environment and installing dependencies...'
+                sh '''
+                    python3 -m venv venv
+                    . venv/bin/activate
+                    pip install --upgrade pip
+                    pip install -r requirements.txt
+                    pip install PySide6 pytest
+                '''
             }
         }
 
         stage('Run Tests') {
             steps {
                 echo 'Running tests with pytest...'
-                sh 'pytest test.py --maxfail=1 --disable-warnings -q'
+                sh '''
+                    . venv/bin/activate
+                    pytest test.py --maxfail=1 --disable-warnings -q
+                '''
             }
         }
 
