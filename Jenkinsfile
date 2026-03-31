@@ -1,49 +1,36 @@
 pipeline {
-    agent {
-        docker {
-            image 'python:3.11'
-            args '-v D:/cargo:/cargo'
-        }
-    }
+    agent any
 
     environment {
-        CARGO_DIR = "/cargo"
+        CARGO_DIR = "D:/cargo"
     }
 
     stages {
         stage('Checkout') {
             steps {
-                echo 'Cloning repository...'
-                git url: 'https://github.com/yourusername/yourgame.git', branch: 'master'
+                git url: 'https://github.com/MariaHusak/Lab_2.git', branch: 'master'
             }
         }
 
         stage('Install dependencies') {
             steps {
                 echo 'Installing dependencies...'
-                sh 'pip install --upgrade pip'
-                sh 'pip install PySide6 pytest'
+                bat 'python -m pip install --upgrade pip'
+                bat 'pip install PySide6 pytest'
             }
         }
 
         stage('Run Tests') {
             steps {
                 echo 'Running tests with pytest...'
-                sh 'pytest test.py --maxfail=1 --disable-warnings -q'
-            }
-        }
-
-        stage('Build / Prepare') {
-            steps {
-                echo 'Preparing project for deployment...'
-                // sh 'pyinstaller --onefile main.py'
+                bat 'pytest test.py --maxfail=1 --disable-warnings -q'
             }
         }
 
         stage('Deploy') {
             steps {
                 echo "Copying project to ${CARGO_DIR}"
-                sh "cp -r . ${CARGO_DIR}/"
+                bat "xcopy /s /y . ${CARGO_DIR}\\"
             }
         }
     }
