@@ -8,15 +8,16 @@ pipeline {
             }
         }
 
-        stage('Build') {
+        stage('Build & Test') {
+            agent {
+                docker {
+                    image 'python:3.11'
+                    args '-u'
+                }
+            }
             steps {
                 sh 'pip install --upgrade pip'
                 sh 'pip install -r requirements.txt || true'
-            }
-        }
-
-        stage('Test') {
-            steps {
                 sh 'pytest || true'
             }
         }
