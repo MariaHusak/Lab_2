@@ -26,14 +26,17 @@ pipeline {
         }
 
         stage('Run Tests') {
-            steps {
-                echo 'Running tests with pytest...'
+        steps {
+            echo 'Running tests with pytest...'
+            withEnv(['QT_QPA_PLATFORM=offscreen']) {
                 sh '''
-                    . venv/bin/activate
-                    pytest test.py --maxfail=1 --disable-warnings -q
+                . venv/bin/activate
+                pytest test.py --maxfail=1 --disable-warnings -q
                 '''
             }
         }
+    }
+
 
         stage('Deploy') {
             steps {
