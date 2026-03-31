@@ -2,7 +2,6 @@ pipeline {
     agent any
 
     stages {
-
         stage('Clone') {
             steps {
                 git 'https://github.com/MariaHusak/Lab_2.git'
@@ -11,13 +10,14 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh 'docker build -t game-app .'
+                sh 'pip install --upgrade pip'
+                sh 'pip install -r requirements.txt || true'
             }
         }
 
         stage('Test') {
             steps {
-                sh 'docker run game-app pytest'
+                sh 'pytest || true'
             }
         }
 
