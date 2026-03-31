@@ -17,7 +17,7 @@ pipeline {
                 echo 'Creating virtual environment and installing dependencies...'
                 sh '''
                     python3 -m venv venv
-                    source venv/bin/activate
+                    . venv/bin/activate
                     pip install --upgrade pip
                     pip install -r requirements.txt
                 '''
@@ -28,7 +28,7 @@ pipeline {
             steps {
                 echo 'Running tests with pytest...'
                 sh '''
-                    source venv/bin/activate
+                    . venv/bin/activate
                     pytest test.py --maxfail=1 --disable-warnings -q
                 '''
             }
