@@ -4,29 +4,40 @@ pipeline {
     stages {
         stage('Clone') {
             steps {
+                echo 'Cloning repository...'
                 git 'https://github.com/MariaHusak/Lab_2.git'
             }
         }
 
-        stage('Build & Test') {
-            agent {
-                docker {
-                    image 'python:3.11'
-                    args '-u'
-                }
-            }
+        stage('Docker Build') {
             steps {
-                sh 'pip install --upgrade pip'
-                sh 'pip install -r requirements.txt || true'
-                sh 'pytest || true'
+                echo 'Building Docker image...'
+                sh 'docker build -t game-app .'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo 'Running tests inside Docker container...'
+                sh 'docker run --rm game-app pytest || true'
             }
         }
 
         stage('Deliver') {
             steps {
+                echo 'Copying files to cargo folder...'
                 sh 'mkdir -p cargo'
                 sh 'cp -r * cargo/'
             }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed.'
         }
     }
 }
